@@ -14,7 +14,7 @@ function createTemplate(slotDetails, date){
     Vaccine is available on <strong> ${date} </strong> in the following centers: 
     <br/><br/>
     `
-    for(const slot of slotDetails){
+    for(const slot of JSON.parse(slotDetails)){
         let slotBody = `<strong> Center Name: ${slot.name} </strong> <br/>
         Location: ${slot.block_name}, ${slot.state_name}, ${slot.pincode} <br/>
         From ${slot.from} to ${slot.to} <br/>
@@ -23,14 +23,14 @@ function createTemplate(slotDetails, date){
         Available Capacity: ${slot.available_capacity} doses available <br/>
         Vaccine: ${slot.vaccine} <br/>
         Slots Available: <br/>`
+        console.log('Nirbhay', slot);
         for(const x of slot.slots){
             slotBody = `${slotBody} ${x} <br/>`
         }
-        slotBody = `${slotBody} <br/><br/>`
-        message = `${message} ${slotBody}`
+        slotBody = `${slotBody} <br/><br/>`;
+        message = `${message} ${slotBody}`;
     }
-
-    return message
+    return message + `Go book https://www.cowin.gov.in/home`;
 }
 
 
