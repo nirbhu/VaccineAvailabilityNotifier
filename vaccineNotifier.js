@@ -20,10 +20,10 @@ const districts = (process.env.DISTRICTS).toString().split(',');
 
 async function main() {
   try {
-    // cron.schedule('*/10 * * * *', async () => {
-    //      await checkAvailability();
-    // });
-    await checkAvailability();
+    cron.schedule('*/10 * * * *', async () => {
+         await checkAvailability();
+    });
+    // await checkAvailability();
   } catch (e) {
     console.log('an error occured: ' + JSON.stringify(e, null, 2));
     throw e;
