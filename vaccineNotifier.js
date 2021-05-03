@@ -20,9 +20,10 @@ const districts = (process.env.DISTRICTS).toString().split(',');
 
 async function main() {
   try {
-    cron.schedule('*/10 * * * *', async () => {
-         await checkAvailability();
-    });
+    // cron.schedule('*/10 * * * *', async () => {
+    //      await checkAvailability();
+    // });
+    await checkAvailability();
   } catch (e) {
     console.log('an error occured: ' + JSON.stringify(e, null, 2));
     throw e;
@@ -53,7 +54,14 @@ function getSlotsForDate(DATE) {
                 slot => slot.min_age_limit <= AGE && slot.available_capacity > 0);
             console.log({date: DATE, validSlots: validSlots.length});
             if (validSlots.length > 0) {
-                notifyMe(validSlots, DATE);
+                if(districtId === '491') {
+                  notifyMe(validSlots, DATE, 'Moga');
+                } else if (districtId === '294' || districtId === '265' || districtId === '276') {
+                  notifyMe(validSlots, DATE, 'Bangalore');
+                } else if (districtId === '179' || districtId === '154' || districtId === '770') {
+                  notifyMe(validSlots, DATE, 'Gujarat');
+                }
+
             }
         }).catch(function(error) {
             console.log(error);
@@ -64,9 +72,9 @@ function getSlotsForDate(DATE) {
 
 }
 
-async function notifyMe(validSlots, date) {
+async function notifyMe(validSlots, date, location) {
   let slotDetails = JSON.stringify(validSlots, null, '\t');
-  notifier.sendEmail(EMAIL, 'VACCINE AVAILABLE', slotDetails, date,
+  notifier.sendEmail(EMAIL, `VACCINE AVAILABLE IN ${location}`, slotDetails, date,
       (err, result) => {
         if (err) {
           console.error({err});
